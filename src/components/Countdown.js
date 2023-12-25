@@ -37,21 +37,18 @@ const Countdown = ({ targetDate }) => {
       
     }}>
       <div className="countdown-wrapper">
-        <div className="digital-clock">
+      <div className="digital-clock">
           <div className="time-section">
             <span className="time">{String(timeLeft.days).padStart(2, '0')}</span>
-            <span className="label">Dias</span>
-            <span className="time">:</span>
+            <span className="label">Días</span>
           </div>
           <div className="time-section">
             <span className="time">{String(timeLeft.hours).padStart(2, '0')}</span>
             <span className="label">Horas</span>
-            <span className="time">:</span>
           </div>
           <div className="time-section">
             <span className="time">{String(timeLeft.minutes).padStart(2, '0')}</span>
             <span className="label">Minutos</span>
-            <span className="time">:</span>
           </div>
           <div className="time-section">
             <span className="time">{String(timeLeft.seconds).padStart(2, '0')}</span>

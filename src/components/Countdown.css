@@ -1,0 +1,49 @@
+.countdown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.countdown-wrapper {
+  background-color: #333;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.digital-clock {
+  display: flex;
+  justify-content: center;
+}
+
+.time-section {
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.time {
+  font-size: 48px;
+  font-weight: bold;
+  padding: 5px;
+  background-color: #fff;
+  color: #333;
+  border-radius: 5px;
+}
+
+.label {
+  font-size: 14px;
+  margin-right: 5px;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url('../source/Rick.gif');
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh; /* Ajusta la altura según sea necesario */
+  /* Otros estilos si los necesitas */
+}

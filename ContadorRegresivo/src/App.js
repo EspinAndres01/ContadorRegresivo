@@ -3,6 +3,10 @@ import './App.css';
 import Countdown from './components/Countdown';
 import Rick from './source/Rick.mp3';
 import Gravity from './source/Gravity.mp3';
+import { io } from 'socket.io-client';
+import { LiMensaje, UlMensajes } from './ui-components';
+
+const socket = io('http://localhost:3000');
 
 function App() {
   const targetDate = '2024-01-01T00:00:00Z';
@@ -10,6 +14,17 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSong, setCurrentSong] = useState(0);
   const audioFiles = useMemo(() => [Rick, Gravity], []);
+
+  const [isConnected, setIsConnected] = useState(false);
+  const [nuevoMensaje,setNuevoMensaje]=useState('');
+  const [mensajes,setMensajes]=useState([]);
+  const enviarMensaje = () => {
+    socket.emit('chat_mensaje', {
+      usuario: socket.id,
+      mensaje: nuevoMensaje
+    });
+  }
+  
 
   const playAudio = () => {
     const audio = audioRef.current;
@@ -35,6 +50,12 @@ function App() {
   };
 
   useEffect(() => {
+    socket.on('connect', () => setIsConnected(true));
+    socket.on('chat_mensaje', (data) => {
+      setMensajes(mensajes => [...mensajes, data]);
+    });
+
+    
     const audio = audioRef.current;
     audio.src = audioFiles[currentSong];
     audio.load();
@@ -43,11 +64,26 @@ function App() {
         console.error('Error al reproducir el audio:', error);
       });
     }
-  }, [currentSong, audioFiles, isPlaying]);
+    return () => {
+      socket.off('connect');
+      socket.off('chat_message');
+    }
+  }, [currentSong, audioFiles, isPlaying,mensajes]);
 
   return (
     <div className="App">
       <h1 className="titulo-fijo">CUENTA REGRESIVA PARA AÑO NUEVO</h1>
+      <h2>{isConnected ? 'CONECTADO' : 'NO CONECTADO'}</h2>
+      <UlMensajes>
+        {mensajes.map(mensaje => (
+          <LiMensaje>{mensaje.usuario}: {mensaje.mensaje}</LiMensaje>
+        ))}
+      </UlMensajes>
+      <input
+        type="text"
+        onChange={e => setNuevoMensaje(e.target.value)}
+      />
+      <button onClick={enviarMensaje}>Enviar</button>
       <Countdown targetDate={targetDate} />
       <audio ref={audioRef} style={{ display: 'none' }} />
 
@@ -64,6 +100,7 @@ function App() {
       </div>
     </div>
   );
+
 }
 
 export default App;
